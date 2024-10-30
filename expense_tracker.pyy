@@ -1,0 +1,65 @@
+import json
+
+# File to store expenses
+EXPENSES_FILE = "expenses.json"
+
+# Load expenses from file
+def load_expenses():
+    try:
+        with open(EXPENSES_FILE, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
+
+# Save expenses to file
+def save_expenses(expenses):
+    with open(EXPENSES_FILE, "w") as file:
+        json.dump(expenses, file, indent=4)
+
+# Add a new expense
+def add_expense(description, amount, category):
+    expenses = load_expenses()
+    expenses.append({"description": description, "amount": amount, "category": category})
+    save_expenses(expenses)
+    print(f"Expense '{description}' added successfully.")
+
+# List all expenses
+def list_expenses():
+    expenses = load_expenses()
+    if expenses:
+        print("Expenses List:")
+        total = 0
+        for expense in expenses:
+            print(f"Description: {expense['description']}")
+            print(f"Amount: ${expense['amount']}")
+            print(f"Category: {expense['category']}")
+            print("-" * 20)
+            total += expense["amount"]
+        print(f"Total Amount Spent: ${total}")
+    else:
+        print("No expenses recorded.")
+
+# Main program loop
+def main():
+    while True:
+        print("\nExpense Tracker")
+        print("1. Add Expense")
+        print("2. List All Expenses")
+        print("3. Exit")
+        choice = input("Enter your choice (1-3): ")
+
+        if choice == "1":
+            description = input("Enter expense description: ")
+            amount = float(input("Enter amount: "))
+            category = input("Enter category (e.g., Food, Transportation, etc.): ")
+            add_expense(description, amount, category)
+        elif choice == "2":
+            list_expenses()
+        elif choice == "3":
+            print("Exiting Expense Tracker. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if _name_ == "_main_":
+    main()
